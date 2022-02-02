@@ -1,0 +1,320 @@
+---
+title: "Linear Regression Models"
+author: "Chuck Cleland"
+institute: "NYU Grossman School of Medicine, Department of Population Health"
+date: "February 24, 2022"
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      countdown: 60000
+      ratio: "16:9"
+---
+
+```{css, echo = FALSE}
+.remark-slide-content {
+  font-size: 30px;
+  padding: 20px 20px 20px 20px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code { /*Change made here*/
+  font-size: 500% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 11px !important;
+}
+
+.large { font-size: 130% }
+.small { font-size: 70% }
+
+.my-one-page-font {
+  font-size: 24px;
+}
+```
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE, device = 'svg', comment = NA)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo_accent(
+  primary_color = "#673888",
+  secondary_color = "#FF961C",
+  inverse_header_color = "#E5E5E5",
+  background_color = "#E5E5E5",
+  title_slide_background_color = "#E5E5E5",
+  title_slide_text_color = "#673888"
+)
+```
+
+
+
+```{r, echo=FALSE, result='hide', message = FALSE, comment=NA}
+library(tidyverse)
+```
+
+# Variables and Constants
+
+.large[
+- Any characteristic that varies from one individual to another can be called a *variable*.
+- Most psychological research is concerned with relations among variables.
+- An example of a variable is sleep latency -- the time it takes an individual to fall asleep.
+- If sleep latency were exactly the same for all people, it would be a *constant*.
+]
+---
+
+# Scales of Measurement
+.large[
+- Measurement is a system for assigning values to observations (people) in a consistent and reproducible way.
+- Measurement need not involve numbers as it could consist of classifying objects (people) into distinct categories (e.g., urban vs. rural residence).
+]
+---
+
+# Nominal Scales
+
+**Nominal scales** are used to assign objects (people) to
+distinct, named categories.  If these categories are assigned
+numbers, those number are arbitrary and cannot be used for
+mathematical operations.  As an example of a nominal scale, facial
+expressions may be classified by the emotion expressed (e.g.,
+anger, happiness, disgust).  Many variables important to
+psychology (e.g., type of therapy, gender) can be measured only on
+a nominal scale.  An object (person) with a specific value for a
+nominal scale (e.g., female) does not have more or less of
+something than another object with a different value (male);
+rather, objects differ by kind, not amount.
+---
+
+# Ordinal Scales
+**Ordinal scales** rank objects (people) according to the
+amount of an attribute they posses.  For example, student
+handwriting may be rated as excellent, good, fair, or poor.  Some
+mathematical operations are permissible for variables which have
+ordinal properties.  For example, the percentage of excellent and
+fair students can be added to say something about the percentage
+of students who have better than fair handwriting.
+---
+
+# Interval Scales
+In general, physical measurements have a level of precision that
+goes beyond the ordinal properties.  Measurement scales with more
+than just ordinal properties are based on units of equal size.  A
+unit at one part of the scale is the same size as a unit at any
+other part of the scale.  Scales which have this property are
+called **interval scales**.
+---
+
+# Ratio Scales
+Scales which have a non-arbitrary zero point, in addition to equal
+units, are called **ratio scales**.  Such scales allow us to
+say, for example, that a sleep latency of 10 minutes is twice as
+short as a sleep latency of 20 minutes.  Many scales in social research
+technically do not have this property.  For example, asserting
+that is twice as depressed as Tom implies that a depression
+scale can identify, in a non-arbitrary way, what zero depression
+is.
+---
+
+# Continuous and Discrete Variables
+- A variable which can take on any value within a specified range for a particular object (person) is a continuous variable.
+- A variable (e.g., charisma) may be theoretically continuous even though a particular measurement of the variable may have only ordinal properties.
+- Thus, it is important not to confuse the variables with the scales with which they are measured.
+---
+
+# Simple linear regression model
+
+$$Y_{i}=\beta_0 + \beta_1 X_{i} + \epsilon_{i}$$
+
+- $\beta_0$ is an intercept
+- $\beta_1$ is a slope (regression coefficient)
+- $Y_{i}$ is an outcome, response, or dependent variable score for person *i*
+- $X_{i}$ is a predictor, explanatory, or independent variable score for person *i*
+- $\epsilon_{i}$ is a residual for person *i*, the difference between between $Y_{i}$ and $\beta_0 + \beta_1 X_{i}$
+---
+
+# Multiple Regression
+
+---
+
+# t-tests and Analysis of Variance as Linear Models
+
+---
+
+# Dummy Coding 
+
+---
+
+# Effect Coding 
+
+---
+
+# Interaction Effects 
+
+---
+
+# Comparisons and Contrasts After Fitting
+
+---
+
+# Accomodating Non-Linear Relations in Linear Regression Models
+
+---
+
+# Simulating Data from a Linear Regression Model
+
+---
+
+class: center
+
+# Logistic regression model
+
+$$\log_e(\frac{\pi_{i}}{1 - \pi_{i}})=\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}$$
+
+where
+
+$\pi_i = E[y_i]$ and
+
+$y_i$ is a binary outcome
+
+---
+
+# Interpretation of regression coefficients
+
+- The intercept coefficient (or constant) is the mean of the outcome when all variables on the right-hand side of the linear regression are held constant at 0
+- Each of the other coefficients represents how the mean of the outcome changes for a 1-unit change in the variable
+
+---
+
+# Prediction from the model
+
+- For any hypothetical case/observation, one can combine a covariate pattern with the model coefficients for a linear predictor (which is the expected value of the outcome)
+
+---
+
+class: my-one-page-font
+
+# How accurate is our prediction?
+
+---
+
+# Checking model assumptions and goodness of fit
+
+- Internal validation via bootstrapping
+- External validation (predict new cases from a previously built model)
+- Calibration curve
+
+---
+
+class: middle, center
+
+# Snippet of the data
+
+---
+
+# Model building strategies
+
+.pull-left[
+- Depends on your inferential goal (prediction, primary exposure effect, relative importance)
+- Bivariate screening (not recommended)
+- Forward stepwise (not recommended)
+- Backward elimination (if you must simplify)
+- Change in coefficient estimates
+]
+
+.pull-right[
+- Simplify right-hand side as much as possible without considering the outcome
+- Allow for non-linear and interaction terms
+- Rule of thumb: ten **events** per predictor
+- Model selection complicates inference
+- See E. Vittinghoff et al., _Regression Methods in Biostatistics_ (Chapter 10)
+]
+
+---
+
+# Sample size, power, and effect size
+
+- A modest population mean difference between groups requires a large sample size for reliable detection
+
+```{r, comment=NA}
+power.t.test(delta = .2, power = .8)
+```
+
+---
+
+class: middle, center
+
+# How sample size needed for 80% power changes as a function of effect size
+```{r, echo=FALSE, message=FALSE, warning=FALSE, comment=NA}
+library(data.table)
+
+DT2 <- data.frame(es = seq(0.2,0.5,0.05))
+
+setDT(DT2)
+DT2[, Row := 1:.N]
+DT2[, n := ceiling(power.t.test(power = .8, delta = es)$n)*2, by = .(Row)]
+```
+
+```{r, echo=FALSE, comment=NA}
+DT2
+```
+
+---
+
+class: middle, center
+
+```{r, echo=FALSE, fig.height = 5, fig.asp = 0.8, fig.align='center', dev='svg'}
+ggplot(DT2, aes(x = es, y = n)) + 
+  geom_point(size = 3) +
+  geom_path() +
+  labs(x = "Standardized Mean Difference\nDetectable with 80% Power", y = "Total Sample Size") +
+  scale_y_continuous(limits=c(0,800), breaks = seq(0,800,100)) +
+  scale_x_continuous(limits=c(0.2,0.5), breaks = seq(0.2,0.5,0.05)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 14, face = "bold"),
+        axis.text.y = element_text(size = 14, face = "bold"),
+        axis.title.x = element_text(size = 18, face = "bold"),
+        axis.title.y = element_text(size = 18, face = "bold"),
+        strip.text.x = element_text(size = 18, face = "bold"),
+        legend.text=element_text(size=18, face = "bold"),
+        legend.position = "right",
+        legend.direction = "vertical",
+        legend.title=element_text(size=20, face = "bold"))
+```
+
+---
+
+# Some extensions of linear regression
+
+- Generalized linear models
+- Generalized additive models
+- Multilevel or mixed-effects regression
+- Structural equation models
+
+---
+
+# References
+
+.small[
+- Baguley, T. (2012). Serious stats: A guide to advanced statistics for the behavioral sciences. Macmillan International Higher Education.
+- Flora, D. B. (2017). Statistical methods for the social and behavioural sciences: A model-based approach. Sage.
+- Fox, J. (2016). Applied regression analysis and generalized linear models(3rd ed.). Sage.
+- Harrell, F.E. (2015). Regression Modeling Strategies: With Applications to Linear Models, Logistic and Ordinal Regression, and Survival Analysis. Springer.
+- Vittinghoff, E., Glidden, D.V., McCulloch, C.E., Shiboski, S.C. (2012). Regression Methods in Biostatistics: Linear, Logistic, Survival, and Repeated Measures Models. Springer.
+]
+---
+
+class: center, middle
+
+# Thanks!
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
