@@ -24,7 +24,7 @@ output:
   background: #f0f0f0;
 }
 .remark-code {
-  font-size: 24px;
+  font-size: 16px;
 }
 .huge .remark-code { /*Change made here*/
   font-size: 500% !important;
@@ -148,6 +148,18 @@ $$Y_{i}=\beta_0 + \beta_1 X_{i} + \epsilon_{i}$$
 
 # t-tests and Analysis of Variance as Linear Models
 
+```{r, message = FALSE, comment=NA}
+DT <- readr::read_csv("ex0222.csv", col_types = c("i","f"))
+```
+
+```{r, message = FALSE, comment=NA}
+t.test(CHOLESTEROL ~ GROUP, data = DT, var.equal = TRUE)
+```
+---
+
+```{r, message = FALSE, comment=NA}
+summary(lm(CHOLESTEROL ~ GROUP, data = DT))
+```
 ---
 
 # Dummy Coding 
@@ -204,6 +216,9 @@ $y_i$ is a binary outcome
 class: my-one-page-font
 
 # How accurate is our prediction?
+
+- Residual standard error (standard deviation of residuals) measures the typical difference between a model prediction and an observed value
+- Plot observed values against predicted values
 
 ---
 

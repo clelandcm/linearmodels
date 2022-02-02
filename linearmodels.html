@@ -29,7 +29,7 @@ class: center, middle, inverse, title-slide
   background: #f0f0f0;
 }
 .remark-code {
-  font-size: 24px;
+  font-size: 16px;
 }
 .huge .remark-code { /*Change made here*/
   font-size: 500% !important;
@@ -139,6 +139,56 @@ is.
 
 # t-tests and Analysis of Variance as Linear Models
 
+
+```r
+DT &lt;- readr::read_csv("ex0222.csv", col_types = c("i","f"))
+```
+
+
+```r
+t.test(CHOLESTEROL ~ GROUP, data = DT, var.equal = TRUE)
+```
+
+```
+
+	Two Sample t-test
+
+data:  CHOLESTEROL by GROUP
+t = -8.0782, df = 92, p-value = 2.476e-12
+alternative hypothesis: true difference in means between group RURAL and group URBAN is not equal to 0
+95 percent confidence interval:
+ -74.58536 -45.14798
+sample estimates:
+mean in group RURAL mean in group URBAN 
+           157.0000            216.8667 
+```
+---
+
+
+```r
+summary(lm(CHOLESTEROL ~ GROUP, data = DT))
+```
+
+```
+
+Call:
+lm(formula = CHOLESTEROL ~ GROUP, data = DT)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-83.87 -20.97  -7.00  18.85 113.13 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  157.000      5.128  30.619  &lt; 2e-16 ***
+GROUPURBAN    59.867      7.411   8.078 2.48e-12 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 35.89 on 92 degrees of freedom
+Multiple R-squared:  0.415,	Adjusted R-squared:  0.4086 
+F-statistic: 65.26 on 1 and 92 DF,  p-value: 2.476e-12
+```
 ---
 
 # Dummy Coding 
@@ -195,6 +245,9 @@ where
 class: my-one-page-font
 
 # How accurate is our prediction?
+
+- Residual standard error (standard deviation of residuals) measures the typical difference between a model prediction and an observed value
+- Plot observed values against predicted values
 
 ---
 
@@ -278,7 +331,7 @@ class: middle, center
 
 class: middle, center
 
-&lt;img src="linearmodels_files/figure-html/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
