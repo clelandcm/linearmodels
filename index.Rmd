@@ -1,0 +1,12 @@
+---
+title: "Linear Models"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+[Slides](https://clelandcm.github.io/linearmodels/linearmodels.html)
+
+
