@@ -39,7 +39,7 @@ class: center, middle, inverse, title-slide
 }
 
 .large { font-size: 130% }
-.small { font-size: 70% }
+.small { font-size: 80% }
 
 .my-one-page-font {
   font-size: 24px;
@@ -52,13 +52,11 @@ class: center, middle, inverse, title-slide
 
 
 
-
-
 # Variables and Constants
 
 .large[
 - Any characteristic that varies from one individual to another can be called a *variable*.
-- Most psychological research is concerned with relations among variables.
+- Social and health research is concerned with relations among variables.
 - An example of a variable is sleep latency -- the time it takes an individual to fall asleep.
 - If sleep latency were exactly the same for all people, it would be a *constant*.
 ]
@@ -71,55 +69,19 @@ class: center, middle, inverse, title-slide
 ]
 ---
 
-# Nominal Scales
-
-**Nominal scales** are used to assign objects (people) to
-distinct, named categories.  If these categories are assigned
-numbers, those number are arbitrary and cannot be used for
-mathematical operations.  As an example of a nominal scale, facial
-expressions may be classified by the emotion expressed (e.g.,
-anger, happiness, disgust).  Many variables important to
-psychology (e.g., type of therapy, gender) can be measured only on
-a nominal scale.  An object (person) with a specific value for a
-nominal scale (e.g., female) does not have more or less of
-something than another object with a different value (male);
-rather, objects differ by kind, not amount.
----
-
-# Ordinal Scales
-**Ordinal scales** rank objects (people) according to the
-amount of an attribute they posses.  For example, student
-handwriting may be rated as excellent, good, fair, or poor.  Some
-mathematical operations are permissible for variables which have
-ordinal properties.  For example, the percentage of excellent and
-fair students can be added to say something about the percentage
-of students who have better than fair handwriting.
----
-
-# Interval Scales
-In general, physical measurements have a level of precision that
-goes beyond the ordinal properties.  Measurement scales with more
-than just ordinal properties are based on units of equal size.  A
-unit at one part of the scale is the same size as a unit at any
-other part of the scale.  Scales which have this property are
-called **interval scales**.
----
-
-# Ratio Scales
-Scales which have a non-arbitrary zero point, in addition to equal
-units, are called **ratio scales**.  Such scales allow us to
-say, for example, that a sleep latency of 10 minutes is twice as
-short as a sleep latency of 20 minutes.  Many scales in social research
-technically do not have this property.  For example, asserting
-that is twice as depressed as Tom implies that a depression
-scale can identify, in a non-arbitrary way, what zero depression
-is.
----
-
 # Continuous and Discrete Variables
+.large[
 - A variable which can take on any value within a specified range for a particular object (person) is a continuous variable.
 - A variable (e.g., charisma) may be theoretically continuous even though a particular measurement of the variable may have only ordinal properties.
 - Thus, it is important not to confuse the variables with the scales with which they are measured.
+]
+---
+
+class: middle,center
+
+
+
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
 ---
 
 # Simple linear regression model
@@ -131,6 +93,41 @@ is.
 - `\(Y_{i}\)` is an outcome, response, or dependent variable score for person *i*
 - `\(X_{i}\)` is a predictor, explanatory, or independent variable score for person *i*
 - `\(\epsilon_{i}\)` is a residual for person *i*, the difference between between `\(Y_{i}\)` and `\(\beta_0 + \beta_1 X_{i}\)`
+---
+
+# A simple linear regression model in R
+
+
+```r
+slrm &lt;- lm(MTL ~ sitting, data = sitting)
+summary(slrm)
+```
+
+```
+
+Call:
+lm(formula = MTL ~ sitting, data = sitting)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.33511 -0.13432 -0.00252  0.11527  0.46907 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  2.69951    0.07309  36.933   &lt;2e-16 ***
+sitting     -0.02288    0.00924  -2.476   0.0186 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.1791 on 33 degrees of freedom
+Multiple R-squared:  0.1567,	Adjusted R-squared:  0.1312 
+F-statistic: 6.132 on 1 and 33 DF,  p-value: 0.01857
+```
+---
+
+class: middle,center
+
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" /&gt;
 ---
 
 # Multiple Regression
@@ -145,12 +142,23 @@ where
 
 ---
 
+# Cholesterol Data
+
+```
+   GROUP Mean Cholesterol  N
+1: URBAN         216.8667 45
+2: RURAL         157.0000 49
+```
+---
+
+class: middle, center
+
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" /&gt;
+---
+
 # t-tests and Analysis of Variance as Linear Models
 
 
-```r
-DT &lt;- readr::read_csv("ex0222.csv", col_types = c("i","f"))
-```
 
 
 ```r
@@ -185,6 +193,9 @@ Residuals   92 118525    1288
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
+
+`$$F=t^2$$` 
+when there are only two groups
 ---
 
 # ANOVA and t-tests are both special cases of linear models 
@@ -220,42 +231,105 @@ F-statistic: 65.26 on 1 and 92 DF,  p-value: 2.476e-12
 ```r
 DT$URBAN &lt;- ifelse(DT$GROUP == "URBAN", 1, 0)
 
-summary(lm(CHOLESTEROL ~ URBAN, data = DT))
+summary(lm(CHOLESTEROL ~ URBAN, data = DT))$coefficients
 ```
 
 ```
-
-Call:
-lm(formula = CHOLESTEROL ~ URBAN, data = DT)
-
-Residuals:
-   Min     1Q Median     3Q    Max 
--83.87 -20.97  -7.00  18.85 113.13 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  157.000      5.128  30.619  &lt; 2e-16 ***
-URBAN         59.867      7.411   8.078 2.48e-12 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 35.89 on 92 degrees of freedom
-Multiple R-squared:  0.415,	Adjusted R-squared:  0.4086 
-F-statistic: 65.26 on 1 and 92 DF,  p-value: 2.476e-12
+             Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept) 157.00000   5.127591 30.618665 4.921724e-50
+URBAN        59.86667   7.410902  8.078189 2.475880e-12
 ```
 
+- Intercept is the mean cholesterol of the reference category group (rural)
+- URBAN coefficient is the difference between the urban group mean and the reference category mean
 ---
 
 # Effect Coding 
 
+```r
+DT$URBAN &lt;- ifelse(DT$GROUP == "URBAN", 1, -1)
+
+summary(lm(CHOLESTEROL ~ URBAN, data = DT))$coefficients
+```
+
+```
+             Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept) 186.93333   3.705451 50.448201 7.752211e-69
+URBAN        29.93333   3.705451  8.078189 2.475880e-12
+```
+
+- Intercept is the *unweighted* mean of the group means
+- URBAN coefficient is the difference between the urban group mean and the *unweighted* mean of the group means
+---
+
+class: middle, center
+
+# Poison Data (n=48)
+
+```
+    TREATMEN POISON Mean Survival Time N
+ 1:        A      I             0.4125 4
+ 2:        B      I             0.8800 4
+ 3:        C      I             0.5675 4
+ 4:        D      I             0.6100 4
+ 5:        A     II             0.3200 4
+ 6:        B     II             0.8150 4
+ 7:        C     II             0.3750 4
+ 8:        D     II             0.6675 4
+ 9:        A    III             0.2100 4
+10:        B    III             0.3350 4
+11:        C    III             0.2350 4
+12:        D    III             0.3250 4
+```
+---
+
+class: middle, center
+
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-16-1.svg" style="display: block; margin: auto;" /&gt;
 ---
 
 # Interaction Effects 
 
+
+```r
+fm1 &lt;- lm(SURVTIM ~ POISON*TREATMEN, data = pois)
+anova(fm1)
+```
+
+```
+Analysis of Variance Table
+
+Response: SURVTIM
+                Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+POISON           2 1.03301 0.51651 23.2217 3.331e-07 ***
+TREATMEN         3 0.92121 0.30707 13.8056 3.777e-06 ***
+POISON:TREATMEN  6 0.25014 0.04169  1.8743    0.1123    
+Residuals       36 0.80072 0.02224                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
 ---
 
 # Comparisons and Contrasts After Fitting
 
+```r
+library(emmeans)
+
+pairs(emmeans(fm1, ~ TREATMEN))
+```
+
+```
+ contrast estimate     SE df t.ratio p.value
+ A - B     -0.3625 0.0609 36  -5.954  &lt;.0001
+ A - C     -0.0783 0.0609 36  -1.287  0.5772
+ A - D     -0.2200 0.0609 36  -3.613  0.0049
+ B - C      0.2842 0.0609 36   4.667  0.0002
+ B - D      0.1425 0.0609 36   2.340  0.1077
+ C - D     -0.1417 0.0609 36  -2.327  0.1108
+
+Results are averaged over the levels of: POISON 
+P value adjustment: tukey method for comparing a family of 4 estimates 
+```
 ---
 
 # Accomodating Non-Linear Relations in Linear Regression Models
@@ -264,19 +338,9 @@ F-statistic: 65.26 on 1 and 92 DF,  p-value: 2.476e-12
 
 # Simulating Data from a Linear Regression Model
 
----
-
-class: center
-
-# Logistic regression model
-
-`$$\log_e(\frac{\pi_{i}}{1 - \pi_{i}})=\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}$$`
-
-where
-
-`\(\pi_i = E[y_i]\)` and
-
-`\(y_i\)` is a binary outcome
+```r
+library(simstudy)
+```
 
 ---
 
@@ -336,6 +400,15 @@ class: middle, center
 
 ---
 
+# Type I, II, &amp; III Sums of Squares
+.small[
+- **Type I** sum of squares use a hierarchical build up approach to estimate the overall significance of each effect. The investigator must determine the sequence in which factor `\(A\)` and factor `\(B\)` will be entered.
+- **Type II** sum of squares uses a modified hierarchical approach. The main effect of factor `\(A\)` is assessed controlling for factor `\(B\)`. The main effect of factor `\(B\)` is assessed controlling for factor `\(A\)`. The interaction is assessed controlling for all lower-order terms (e.g., main effects of `\(A\)` and `\(B\)`).
+- **Type III** sum of squares compare the prediction of the full model ( `\(A\)`, `\(B\)`, `\(A*B\)` ) to submodels in which only the effect of interest is eliminated. The difference
+between Type II and Type III is that with Type III, other main effects and the interaction are controlled in assessing a particular main effect while with Type II, higher-order terms are not controlled when assessing lower-order terms.
+]
+---
+
 # Sample size, power, and effect size
 
 - A modest population mean difference between groups requires a large sample size for reliable detection
@@ -382,7 +455,7 @@ class: middle, center
 
 class: middle, center
 
-&lt;img src="linearmodels_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 

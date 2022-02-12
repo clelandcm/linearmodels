@@ -34,7 +34,7 @@ output:
 }
 
 .large { font-size: 130% }
-.small { font-size: 70% }
+.small { font-size: 80% }
 
 .my-one-page-font {
   font-size: 24px;
@@ -59,13 +59,16 @@ style_duo_accent(
 
 ```{r, echo=FALSE, result='hide', message = FALSE, comment=NA}
 library(tidyverse)
+library(ggplot2)
+library(data.table)
+library(magrittr)
 ```
 
 # Variables and Constants
 
 .large[
 - Any characteristic that varies from one individual to another can be called a *variable*.
-- Most psychological research is concerned with relations among variables.
+- Social and health research is concerned with relations among variables.
 - An example of a variable is sleep latency -- the time it takes an individual to fall asleep.
 - If sleep latency were exactly the same for all people, it would be a *constant*.
 ]
@@ -78,55 +81,27 @@ library(tidyverse)
 ]
 ---
 
-# Nominal Scales
-
-**Nominal scales** are used to assign objects (people) to
-distinct, named categories.  If these categories are assigned
-numbers, those number are arbitrary and cannot be used for
-mathematical operations.  As an example of a nominal scale, facial
-expressions may be classified by the emotion expressed (e.g.,
-anger, happiness, disgust).  Many variables important to
-psychology (e.g., type of therapy, gender) can be measured only on
-a nominal scale.  An object (person) with a specific value for a
-nominal scale (e.g., female) does not have more or less of
-something than another object with a different value (male);
-rather, objects differ by kind, not amount.
----
-
-# Ordinal Scales
-**Ordinal scales** rank objects (people) according to the
-amount of an attribute they posses.  For example, student
-handwriting may be rated as excellent, good, fair, or poor.  Some
-mathematical operations are permissible for variables which have
-ordinal properties.  For example, the percentage of excellent and
-fair students can be added to say something about the percentage
-of students who have better than fair handwriting.
----
-
-# Interval Scales
-In general, physical measurements have a level of precision that
-goes beyond the ordinal properties.  Measurement scales with more
-than just ordinal properties are based on units of equal size.  A
-unit at one part of the scale is the same size as a unit at any
-other part of the scale.  Scales which have this property are
-called **interval scales**.
----
-
-# Ratio Scales
-Scales which have a non-arbitrary zero point, in addition to equal
-units, are called **ratio scales**.  Such scales allow us to
-say, for example, that a sleep latency of 10 minutes is twice as
-short as a sleep latency of 20 minutes.  Many scales in social research
-technically do not have this property.  For example, asserting
-that is twice as depressed as Tom implies that a depression
-scale can identify, in a non-arbitrary way, what zero depression
-is.
----
-
 # Continuous and Discrete Variables
+.large[
 - A variable which can take on any value within a specified range for a particular object (person) is a continuous variable.
 - A variable (e.g., charisma) may be theoretically continuous even though a particular measurement of the variable may have only ordinal properties.
 - Thus, it is important not to confuse the variables with the scales with which they are measured.
+]
+---
+
+class: middle,center
+
+```{r, echo=FALSE, results='hide'}
+sitting <- read.csv("sitting.csv")
+```
+
+```{r, echo=FALSE, fig.width = 8, fig.asp = 0.7, fig.align='center', dev='svg'}
+ggplot(sitting, aes(x = sitting, y = MTL)) +
+  geom_point(size = 3, color = "#673888") +
+  scale_x_continuous(limits=c(0,16), breaks = 0:16) +
+  labs(x = "Hours/Day Spent Sitting", y = "Medial Temporal Lobe Thickness") +
+  theme_minimal()
+```
 ---
 
 # Simple linear regression model
@@ -138,6 +113,26 @@ $$Y_{i}=\beta_0 + \beta_1 X_{i} + \epsilon_{i}$$
 - $Y_{i}$ is an outcome, response, or dependent variable score for person *i*
 - $X_{i}$ is a predictor, explanatory, or independent variable score for person *i*
 - $\epsilon_{i}$ is a residual for person *i*, the difference between between $Y_{i}$ and $\beta_0 + \beta_1 X_{i}$
+---
+
+# A simple linear regression model in R
+
+```{r, message = FALSE, comment=NA}
+slrm <- lm(MTL ~ sitting, data = sitting)
+summary(slrm)
+```
+---
+
+class: middle,center
+
+```{r, echo=FALSE, message=FALSE, fig.width = 8, fig.asp = 0.7, fig.align='center', dev='svg'}
+ggplot(sitting, aes(x = sitting, y = MTL)) +
+  geom_point(size = 3, color = "#673888") +
+  scale_x_continuous(limits=c(0,16), breaks = 0:16) +
+  labs(x = "Hours/Day Spent Sitting", y = "Medial Temporal Lobe Thickness") +
+  geom_smooth(method = "lm", se=FALSE, color="red") +
+  theme_minimal()
+```
 ---
 
 # Multiple Regression
@@ -152,10 +147,32 @@ where
 
 ---
 
+# Cholesterol Data
+```{r, message = FALSE, comment=NA, echo=FALSE}
+DT <- readr::read_csv("ex0222.csv", col_types = c("i","f"))
+
+setDT(DT)
+
+DT[, .(`Mean Cholesterol` = mean(CHOLESTEROL), N = .N), by = .(GROUP)]
+```
+---
+
+class: middle, center
+
+```{r, echo=FALSE, fig.width = 12, fig.asp = 0.3, fig.align='center', dev='svg'}
+ggplot(DT, aes(x = GROUP, y = CHOLESTEROL)) + 
+  geom_boxplot(outlier.colour = "transparent", fill = "transparent") +
+  geom_jitter(shape = 1, size = 2, position = position_jitter(width = .10, height = 0), color = "#673888") +
+  labs(x = "", y = "Cholesterol") +
+  coord_flip() +
+  theme_minimal()
+```
+---
+
 # t-tests and Analysis of Variance as Linear Models
 
 ```{r, message = FALSE, comment=NA}
-DT <- readr::read_csv("ex0222.csv", col_types = c("i","f"))
+
 ```
 
 ```{r, message = FALSE, comment=NA}
@@ -167,6 +184,9 @@ t.test(CHOLESTEROL ~ GROUP, data = DT, var.equal = TRUE)
 ```{r, message = FALSE, comment=NA}
 summary(aov(CHOLESTEROL ~ GROUP, data = DT))
 ```
+
+$$F=t^2$$ 
+when there are only two groups
 ---
 
 # ANOVA and t-tests are both special cases of linear models 
@@ -179,21 +199,61 @@ summary(lm(CHOLESTEROL ~ GROUP, data = DT))
 ```{r, message = FALSE, comment=NA}
 DT$URBAN <- ifelse(DT$GROUP == "URBAN", 1, 0)
 
-summary(lm(CHOLESTEROL ~ URBAN, data = DT))
+summary(lm(CHOLESTEROL ~ URBAN, data = DT))$coefficients
 ```
 
+- Intercept is the mean cholesterol of the reference category group (rural)
+- URBAN coefficient is the difference between the urban group mean and the reference category mean
 ---
 
 # Effect Coding 
+```{r, message = FALSE, comment=NA}
+DT$URBAN <- ifelse(DT$GROUP == "URBAN", 1, -1)
 
+summary(lm(CHOLESTEROL ~ URBAN, data = DT))$coefficients
+```
+
+- Intercept is the *unweighted* mean of the group means
+- URBAN coefficient is the difference between the urban group mean and the *unweighted* mean of the group means
+---
+
+class: middle, center
+
+# Poison Data (n=48)
+```{r, message = FALSE, comment=NA, echo=FALSE}
+pois <- read.csv("poison.csv", header = TRUE, colClasses = c("factor","factor","numeric","integer","integer"))
+
+setDT(pois)
+
+pois[, .(`Mean Survival Time` = mean(SURVTIM), N = .N), by = .(TREATMEN,POISON)]
+```
+---
+
+class: middle, center
+
+```{r, echo=FALSE, fig.width = 9, fig.asp = 0.6, fig.align='center', dev='svg'}
+ggplot(pois, aes(x = POISON, y = SURVTIM, color = TREATMEN)) + 
+  geom_point(size=3, alpha = 1/2) + 
+  facet_wrap(~ TREATMEN, nrow = 1) +
+  labs(color = "Treatment", x = "Poison", y = "Survival Time") +
+  theme_minimal()
+```
 ---
 
 # Interaction Effects 
 
+```{r, message = FALSE, comment=NA}
+fm1 <- lm(SURVTIM ~ POISON*TREATMEN, data = pois)
+anova(fm1)
+```
 ---
 
 # Comparisons and Contrasts After Fitting
+```{r, message = FALSE, comment=NA}
+library(emmeans)
 
+pairs(emmeans(fm1, ~ TREATMEN))
+```
 ---
 
 # Accomodating Non-Linear Relations in Linear Regression Models
@@ -201,20 +261,10 @@ summary(lm(CHOLESTEROL ~ URBAN, data = DT))
 ---
 
 # Simulating Data from a Linear Regression Model
+```{r}
+library(simstudy)
 
----
-
-class: center
-
-# Logistic regression model
-
-$$\log_e(\frac{\pi_{i}}{1 - \pi_{i}})=\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}$$
-
-where
-
-$\pi_i = E[y_i]$ and
-
-$y_i$ is a binary outcome
+```
 
 ---
 
@@ -272,6 +322,15 @@ class: middle, center
 - See E. Vittinghoff et al., _Regression Methods in Biostatistics_ (Chapter 10)
 ]
 
+---
+
+# Type I, II, & III Sums of Squares
+.small[
+- **Type I** sum of squares use a hierarchical build up approach to estimate the overall significance of each effect. The investigator must determine the sequence in which factor $A$ and factor $B$ will be entered.
+- **Type II** sum of squares uses a modified hierarchical approach. The main effect of factor $A$ is assessed controlling for factor $B$. The main effect of factor $B$ is assessed controlling for factor $A$. The interaction is assessed controlling for all lower-order terms (e.g., main effects of $A$ and $B$).
+- **Type III** sum of squares compare the prediction of the full model ( $A$, $B$, $A*B$ ) to submodels in which only the effect of interest is eliminated. The difference
+between Type II and Type III is that with Type III, other main effects and the interaction are controlled in assessing a particular main effect while with Type II, higher-order terms are not controlled when assessing lower-order terms.
+]
 ---
 
 # Sample size, power, and effect size
