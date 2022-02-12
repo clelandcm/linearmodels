@@ -135,6 +135,14 @@ is.
 
 # Multiple Regression
 
+For `\(k\)` independent variables, the equation for multiple regression is:
+
+`$$Y=a + b_1X_1 + b_2X_2 + ... + b_kX_k + e$$`
+where
+- `\(a\)` is an intercept
+- `\(b\)`s are regression coefficients applied to the `\(k\)` `\(X\)`s
+- `\(e\)` is a residual or error
+
 ---
 
 # t-tests and Analysis of Variance as Linear Models
@@ -164,6 +172,22 @@ mean in group RURAL mean in group URBAN
 ```
 ---
 
+# t-tests are a special case of Analysis of Variance
+
+```r
+summary(aov(CHOLESTEROL ~ GROUP, data = DT))
+```
+
+```
+            Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+GROUP        1  84072   84072   65.26 2.48e-12 ***
+Residuals   92 118525    1288                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+---
+
+# ANOVA and t-tests are both special cases of linear models 
 
 ```r
 summary(lm(CHOLESTEROL ~ GROUP, data = DT))
@@ -191,7 +215,34 @@ F-statistic: 65.26 on 1 and 92 DF,  p-value: 2.476e-12
 ```
 ---
 
-# Dummy Coding 
+# Dummy Coding
+
+```r
+DT$URBAN &lt;- ifelse(DT$GROUP == "URBAN", 1, 0)
+
+summary(lm(CHOLESTEROL ~ URBAN, data = DT))
+```
+
+```
+
+Call:
+lm(formula = CHOLESTEROL ~ URBAN, data = DT)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-83.87 -20.97  -7.00  18.85 113.13 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  157.000      5.128  30.619  &lt; 2e-16 ***
+URBAN         59.867      7.411   8.078 2.48e-12 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 35.89 on 92 degrees of freedom
+Multiple R-squared:  0.415,	Adjusted R-squared:  0.4086 
+F-statistic: 65.26 on 1 and 92 DF,  p-value: 2.476e-12
+```
 
 ---
 
@@ -331,7 +382,7 @@ class: middle, center
 
 class: middle, center
 
-&lt;img src="linearmodels_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
