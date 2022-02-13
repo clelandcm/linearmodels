@@ -248,11 +248,19 @@ anova(fm1)
 ```
 ---
 
-# Comparisons and Contrasts After Fitting
+# Pairwise Comparisons After Fitting
 ```{r, message = FALSE, comment=NA}
 library(emmeans)
 
 pairs(emmeans(fm1, ~ TREATMEN))
+```
+---
+
+# Planned Contrasts After Fitting
+```{r, message = FALSE, comment=NA}
+emmeans::contrast(emmeans(fm1, ~ TREATMEN), 
+               list(`A vs. B,C,D` = c(1/1, -1/3, -1/3, -1/3), 
+                    `A,C vs. B,D` = c(1/2, -1/2,  1/2, -1/2)))
 ```
 ---
 
