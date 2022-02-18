@@ -280,6 +280,16 @@ library(simstudy)
 
 - The intercept coefficient (or constant) is the mean of the outcome when all variables on the right-hand side of the linear regression are held constant at 0
 - Each of the other coefficients represents how the mean of the outcome changes for a 1-unit change in the variable
+- When the explanatory variable is a dummy variable, the unstandardized coefficient is a mean difference on the outcome variable
+
+---
+
+# Unstandardized and Standardized Coefficients
+- Unstandardized coefficients (*B*) are based on the raw units of the IVs and the DV.
+- The unstandardized coefficient (*B*) is interpreted as the increase in the DV expected for a single unit increase in the IV.
+- A standardized coefficient ( $\beta$ ) is interpreted as the increase in the DV, expressed in z scores, expected for a single standard deviation increase in the IV.
+
+$\beta = B*sd_x/sd_y$ , $B = \beta*sd_y/sd_x$
 
 ---
 
@@ -298,17 +308,16 @@ class: my-one-page-font
 
 ---
 
+# The Squared Multiple Correlation, $R^2$
+- A number between zero and one summarizing how much of the outcome variable's variance is explained by the model
+
+---
+
 # Checking model assumptions and goodness of fit
 
 - Internal validation via bootstrapping
 - External validation (predict new cases from a previously built model)
 - Calibration curve
-
----
-
-class: middle, center
-
-# Snippet of the data
 
 ---
 
