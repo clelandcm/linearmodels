@@ -64,6 +64,8 @@ library(data.table)
 library(magrittr)
 library(knitr)
 library(kableExtra)
+library(table1)
+library(GGally)
 ```
 
 # Variables and Constants
@@ -146,6 +148,45 @@ where
 - $a$ is an intercept
 - $b$s are regression coefficients applied to the $k$ $X$s
 - $e$ is a residual or error
+
+---
+
+# Aggression Data
+```{r, message = FALSE, comment=NA, echo=FALSE}
+DT <- read.table("aggression.dat", sep = "\t")
+
+colnames(DT) <- c('age', 'BPAQ', 'AISS', 'alcohol', 'BIS', 'NEOc', 'gender', 'NEOo')
+
+DT$gender <- car::recode(DT$gender, "1='Female';0='Male'", as.factor = TRUE)
+
+setDT(DT)
+
+label(DT$age) <- "Age in Years"
+label(DT$BPAQ) <- "Buss-Perry Aggression Questionnaire"
+label(DT$BIS) <- "Barratt Impulsiveness Scale"
+label(DT$AISS) <- "AISS"
+label(DT$alcohol) <- "Alcohol"
+label(DT$NEOc) <- "NEO Personality Conscientiousness"
+label(DT$NEOo) <- "NEO Personality Openness" 
+label(DT$gender) <- "Gender"
+
+table1(~ ., data = DT[, .(BPAQ, BIS, age, NEOc, NEOo, gender)])
+```
+
+---
+
+```{r, echo=FALSE, fig.width = 9, fig.asp = 0.6, fig.align='center', dev='svg'}
+ggpairs(data = subset(DT, select = c(BPAQ, BIS, age)))
+```
+
+---
+
+# Fit and Summarize a Multiple Regression Model
+```{r, message = FALSE, comment=NA,}
+fm1 <- lm(BPAQ ~ age + BIS, data = DT)
+
+summary(fm1)
+```
 
 ---
 
