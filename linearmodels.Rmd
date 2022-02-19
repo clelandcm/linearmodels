@@ -225,7 +225,8 @@ pois <- read.csv("poison.csv", header = TRUE, colClasses = c("factor","factor","
 
 setDT(pois)
 
-pois[, .(`Mean Survival Time` = mean(SURVTIM), N = .N), by = .(TREATMEN,POISON)]
+pois[, .(`Mean Survival Time` = mean(SURVTIM), N = .N), by = .(TREATMEN,POISON)] %>%
+  knitr::kable(format = "html")
 ```
 ---
 
@@ -378,11 +379,14 @@ DT2 <- data.frame(es = seq(0.2,0.5,0.05))
 
 setDT(DT2)
 DT2[, Row := 1:.N]
-DT2[, n := ceiling(power.t.test(power = .8, delta = es)$n)*2, by = .(Row)]
+DT2[,  n := ceiling(power.t.test(power = .8, delta = es)$n)*2, by = .(Row)]
+DT2[, `Standardized Mean Difference` := es]
+DT2[, `Sample Size for 80% Power` := n]
 ```
 
 ```{r, echo=FALSE, comment=NA}
-DT2
+DT2[,.(`Standardized Mean Difference`, `Sample Size for 80% Power`)] %>%
+  knitr::kable(format = 'html', align = 'c') 
 ```
 
 ---
@@ -426,6 +430,7 @@ ggplot(DT2, aes(x = es, y = n)) +
 - Flora, D. B. (2017). Statistical methods for the social and behavioural sciences: A model-based approach. Sage.
 - Fox, J. (2016). Applied regression analysis and generalized linear models(3rd ed.). Sage.
 - Harrell, F.E. (2015). Regression Modeling Strategies: With Applications to Linear Models, Logistic and Ordinal Regression, and Survival Analysis. Springer.
+- Pedhazur, E. J. (1997). Multiple regression in behavioral research: Explanation and prediction. Thompson Learning. Inc: New York, NY.
 - Vittinghoff, E., Glidden, D.V., McCulloch, C.E., Shiboski, S.C. (2012). Regression Methods in Biostatistics: Linear, Logistic, Survival, and Repeated Measures Models. Springer.
 ]
 ---
