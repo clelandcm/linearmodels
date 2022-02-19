@@ -318,6 +318,7 @@ class: my-one-page-font
 .center[
 ![an image](apa-reporting-multiple-linear-regression.png)
 ]
+- Descriptive statistics for outcome and explanatory variables are typically in a separate table
 ---
 
 # Checking model assumptions and goodness of fit
