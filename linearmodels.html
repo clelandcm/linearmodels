@@ -100,6 +100,7 @@ class: middle,center
 
 # A simple linear regression model in R
 
+.pull-left[
 
 ```r
 slrm &lt;- lm(MTL ~ sitting, data = sitting)
@@ -126,6 +127,13 @@ Residual standard error: 0.1791 on 33 degrees of freedom
 Multiple R-squared:  0.1567,	Adjusted R-squared:  0.1312 
 F-statistic: 6.132 on 1 and 33 DF,  p-value: 0.01857
 ```
+]
+
+.pull-right[
+- More sitting associated with decreased MTL thickness
+- Each additional hour of sitting associated with **decrease** of about 0.02 in thickness
+- Allows us to draw a line through the scatterplot
+]
 ---
 
 class: middle,center
@@ -239,7 +247,7 @@ where
 # Fit and Summarize a Multiple Regression Model
 
 ```r
-fm1 &lt;- lm(BPAQ ~ age + BIS, data = DT)
+fm1 &lt;- lm(BPAQ ~ age + BIS, data = agg)
 
 summary(fm1)
 ```
@@ -247,7 +255,7 @@ summary(fm1)
 ```
 
 Call:
-lm(formula = BPAQ ~ age + BIS, data = DT)
+lm(formula = BPAQ ~ age + BIS, data = agg)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
@@ -524,8 +532,8 @@ class: middle, center
 
 
 ```r
-fm1 &lt;- lm(SURVTIM ~ POISON*TREATMEN, data = pois)
-anova(fm1)
+fm2 &lt;- lm(SURVTIM ~ POISON*TREATMEN, data = pois)
+anova(fm2)
 ```
 
 ```
@@ -547,7 +555,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```r
 library(emmeans)
 
-pairs(emmeans(fm1, ~ TREATMEN))
+pairs(emmeans(fm2, ~ TREATMEN))
 ```
 
 ```
@@ -567,7 +575,7 @@ P value adjustment: tukey method for comparing a family of 4 estimates
 # Planned Contrasts After Fitting
 
 ```r
-emmeans::contrast(emmeans(fm1, ~ TREATMEN), 
+emmeans::contrast(emmeans(fm2, ~ TREATMEN), 
                list(`A vs. B,C,D` = c(1/1, -1/3, -1/3, -1/3), 
                     `A,C vs. B,D` = c(1/2, -1/2,  1/2, -1/2)))
 ```
@@ -579,15 +587,6 @@ emmeans::contrast(emmeans(fm1, ~ TREATMEN),
 
 Results are averaged over the levels of: POISON 
 ```
----
-
-# Accomodating Non-Linear Relations in Linear Regression Models
-
----
-
-# Simulating Data from a Linear Regression Model
-
-
 ---
 
 # Interpretation of regression coefficients
@@ -609,17 +608,63 @@ Results are averaged over the levels of: POISON
 ---
 
 # Prediction from the model
+- For any hypothetical case/observation, one can combine a covariate pattern with the model coefficients for a prediction
+- For the aggression linear model, what should we predict for an individual with BIS=3 and age=18?     
 
-- For any hypothetical case/observation, one can combine a covariate pattern with the model coefficients for a linear predictor (which is the expected value of the outcome)
+.pull-left[
+
+```r
+coef(fm1)
+```
+
+```
+## (Intercept)         age         BIS 
+##  1.95439237 -0.01755627  0.44360694
+```
+]
+
+.pull-right[
+
+```r
+1.95439237 + -0.01755627*18  + 0.44360694*3
+```
+
+```
+## [1] 2.9692
+```
+]
+
+
+```r
+predict(fm1, newdata = expand.grid(age = c(17,18), BIS = c(3,4)))
+```
+
+```
+##        1        2        3        4 
+## 2.986757 2.969200 3.430364 3.412807
+```
+
+---
+
+# Linear model residuals
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-26-1.svg" style="display: block; margin: auto;" /&gt;
+
+- Typically off by a small amount, but sometimes a large over- or under-estimate of BPAQ
 
 ---
 
 class: my-one-page-font
 
 # How accurate is our prediction?
-
+.pull-left[
 - Residual standard error (standard deviation of residuals) measures the typical difference between a model prediction and an observed value
 - Plot observed values against predicted values
+- On the 1-4 BPAQ scale, prediction is typically off by +/-0.5 (not great!)
+]
+
+.pull-right[
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-27-1.svg" style="display: block; margin: auto;" /&gt;
+]
 
 ---
 
@@ -636,11 +681,16 @@ class: my-one-page-font
 - Descriptive statistics for outcome and explanatory variables are typically in a separate table
 ---
 
-# Checking model assumptions and goodness of fit
+# Assumptions of Linear Model
+- Linearity
+- For standard inference, normally distributed residuals
+- Homoscedasticity (i.e., constant variance of residuals across values of explanatory variables)
 
-- Internal validation via bootstrapping
-- External validation (predict new cases from a previously built model)
-- Calibration curve
+---
+
+# Diagnostics and Workarounds for Linear Model Assumptions
+- Transformations of outcome and/or explanatory variables
+- Bootstrapping for inference
 
 ---
 
@@ -657,8 +707,8 @@ class: my-one-page-font
 .pull-right[
 - Simplify right-hand side as much as possible without considering the outcome
 - Allow for non-linear and interaction terms
-- Rule of thumb: ten **events** per predictor
-- Model selection complicates inference
+- Rule of thumb: ten observations per **candidate** predictor
+- Model selection complicates statistical inference
 - See E. Vittinghoff et al., _Regression Methods in Biostatistics_ (Chapter 10)
 ]
 
@@ -703,7 +753,7 @@ class: middle, center
 # How sample size needed for 80% power changes as a function of effect size
 
 
-&lt;table&gt;
+&lt;table class="table" style="font-size: 20px; width: auto !important; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:center;"&gt; Standardized Mean Difference &lt;/th&gt;
@@ -746,14 +796,14 @@ class: middle, center
 
 class: middle, center
 
-&lt;img src="linearmodels_files/figure-html/unnamed-chunk-27-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-31-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Some extensions of linear regression
 
+- Robust linear models
 - Generalized linear models
-- Generalized additive models
 - Multilevel or mixed-effects regression
 - Structural equation models
 

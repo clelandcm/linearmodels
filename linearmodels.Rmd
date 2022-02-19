@@ -121,10 +121,18 @@ $$Y_{i}=\beta_0 + \beta_1 X_{i} + \epsilon_{i}$$
 
 # A simple linear regression model in R
 
+.pull-left[
 ```{r, message = FALSE, comment=NA}
 slrm <- lm(MTL ~ sitting, data = sitting)
 summary(slrm)
 ```
+]
+
+.pull-right[
+- More sitting associated with decreased MTL thickness
+- Each additional hour of sitting associated with **decrease** of about 0.02 in thickness
+- Allows us to draw a line through the scatterplot
+]
 ---
 
 class: middle,center
@@ -153,37 +161,37 @@ where
 
 # Aggression Data
 ```{r, message = FALSE, comment=NA, echo=FALSE}
-DT <- read.table("aggression.dat", sep = "\t")
+agg <- read.table("aggression.dat", sep = "\t")
 
-colnames(DT) <- c('age', 'BPAQ', 'AISS', 'alcohol', 'BIS', 'NEOc', 'gender', 'NEOo')
+colnames(agg) <- c('age', 'BPAQ', 'AISS', 'alcohol', 'BIS', 'NEOc', 'gender', 'NEOo')
 
-DT$gender <- car::recode(DT$gender, "1='Female';0='Male'", as.factor = TRUE)
+agg$gender <- car::recode(agg$gender, "1='Female';0='Male'", as.factor = TRUE)
 
-setDT(DT)
+setDT(agg)
 
-label(DT$age) <- "Age in Years"
-label(DT$BPAQ) <- "Buss-Perry Aggression Questionnaire"
-label(DT$BIS) <- "Barratt Impulsiveness Scale"
-label(DT$AISS) <- "AISS"
-label(DT$alcohol) <- "Alcohol"
-label(DT$NEOc) <- "NEO Personality Conscientiousness"
-label(DT$NEOo) <- "NEO Personality Openness" 
-label(DT$gender) <- "Gender"
+label(agg$age) <- "Age in Years"
+label(agg$BPAQ) <- "Buss-Perry Aggression Questionnaire"
+label(agg$BIS) <- "Barratt Impulsiveness Scale"
+label(agg$AISS) <- "AISS"
+label(agg$alcohol) <- "Alcohol"
+label(agg$NEOc) <- "NEO Personality Conscientiousness"
+label(agg$NEOo) <- "NEO Personality Openness" 
+label(agg$gender) <- "Gender"
 
-table1(~ ., data = DT[, .(BPAQ, BIS, age, NEOc, NEOo, gender)])
+table1(~ ., data = agg[, .(BPAQ, BIS, age, NEOc, NEOo, gender)])
 ```
 
 ---
 
 ```{r, echo=FALSE, fig.width = 9, fig.asp = 0.6, fig.align='center', dev='svg'}
-ggpairs(data = subset(DT, select = c(BPAQ, BIS, age)))
+ggpairs(data = subset(agg, select = c(BPAQ, BIS, age)))
 ```
 
 ---
 
 # Fit and Summarize a Multiple Regression Model
 ```{r, message = FALSE, comment=NA,}
-fm1 <- lm(BPAQ ~ age + BIS, data = DT)
+fm1 <- lm(BPAQ ~ age + BIS, data = agg)
 
 summary(fm1)
 ```
@@ -291,8 +299,8 @@ ggplot(pois, aes(x = POISON, y = SURVTIM, color = TREATMEN)) +
 # Interaction Effects 
 
 ```{r, message = FALSE, comment=NA}
-fm1 <- lm(SURVTIM ~ POISON*TREATMEN, data = pois)
-anova(fm1)
+fm2 <- lm(SURVTIM ~ POISON*TREATMEN, data = pois)
+anova(fm2)
 ```
 ---
 
@@ -300,28 +308,16 @@ anova(fm1)
 ```{r, message = FALSE, comment=NA}
 library(emmeans)
 
-pairs(emmeans(fm1, ~ TREATMEN))
+pairs(emmeans(fm2, ~ TREATMEN))
 ```
 ---
 
 # Planned Contrasts After Fitting
 ```{r, message = FALSE, comment=NA}
-emmeans::contrast(emmeans(fm1, ~ TREATMEN), 
+emmeans::contrast(emmeans(fm2, ~ TREATMEN), 
                list(`A vs. B,C,D` = c(1/1, -1/3, -1/3, -1/3), 
                     `A,C vs. B,D` = c(1/2, -1/2,  1/2, -1/2)))
 ```
----
-
-# Accomodating Non-Linear Relations in Linear Regression Models
-
----
-
-# Simulating Data from a Linear Regression Model
-```{r}
-
-
-```
-
 ---
 
 # Interpretation of regression coefficients
@@ -343,17 +339,60 @@ $\beta = B*sd_x/sd_y$ , $B = \beta*sd_y/sd_x$
 ---
 
 # Prediction from the model
+- For any hypothetical case/observation, one can combine a covariate pattern with the model coefficients for a prediction
+- For the aggression linear model, what should we predict for an individual with BIS=3 and age=18?     
 
-- For any hypothetical case/observation, one can combine a covariate pattern with the model coefficients for a linear predictor (which is the expected value of the outcome)
+.pull-left[
+```{r}
+coef(fm1)
+```
+]
+
+.pull-right[
+```{r}
+1.95439237 + -0.01755627*18  + 0.44360694*3
+```
+]
+
+```{r}
+predict(fm1, newdata = expand.grid(age = c(17,18), BIS = c(3,4)))
+```
+
+---
+
+# Linear model residuals
+```{r, message = FALSE, echo=FALSE, fig.width = 6, fig.asp = 0.6, fig.align='center', dev='svg'}
+ggplot(data.frame(resid = resid(fm1)), aes(x = resid)) + 
+  geom_histogram(color = "white", fill = "#673888") + 
+  labs(x = "Residual", y = "Number of People") +
+  theme_minimal()
+```
+
+- Typically off by a small amount, but sometimes a large over- or under-estimate of BPAQ
 
 ---
 
 class: my-one-page-font
 
 # How accurate is our prediction?
-
+.pull-left[
 - Residual standard error (standard deviation of residuals) measures the typical difference between a model prediction and an observed value
 - Plot observed values against predicted values
+- On the 1-4 BPAQ scale, prediction is typically off by +/-0.5 (not great!)
+]
+
+.pull-right[
+```{r, message = FALSE, echo=FALSE, fig.width = 4, fig.asp = 1, fig.align='center', dev='svg'}
+agg$Predicted_BPAQ <- predict(fm1)
+ggplot(agg, aes(x = Predicted_BPAQ, y = BPAQ)) +
+  geom_point(size = 2, color = "#673888", alpha = 1/4) +
+  scale_x_continuous(limits=c(1.5,3.5), breaks=seq(1.5,3.5,0.5)) +
+  scale_y_continuous(limits=c(1,4.2), breaks=1:4) +
+  labs(x = "Model Predicted BPAQ", y = "Observed BPAQ") +
+  geom_smooth(method = "lm", se=FALSE, color="red") +
+  theme_minimal()
+```
+]
 
 ---
 
@@ -370,11 +409,16 @@ class: my-one-page-font
 - Descriptive statistics for outcome and explanatory variables are typically in a separate table
 ---
 
-# Checking model assumptions and goodness of fit
+# Assumptions of Linear Model
+- Linearity
+- For standard inference, normally distributed residuals
+- Homoscedasticity (i.e., constant variance of residuals across values of explanatory variables)
 
-- Internal validation via bootstrapping
-- External validation (predict new cases from a previously built model)
-- Calibration curve
+---
+
+# Diagnostics and Workarounds for Linear Model Assumptions
+- Transformations of outcome and/or explanatory variables
+- Bootstrapping for inference
 
 ---
 
@@ -391,8 +435,8 @@ class: my-one-page-font
 .pull-right[
 - Simplify right-hand side as much as possible without considering the outcome
 - Allow for non-linear and interaction terms
-- Rule of thumb: ten **events** per predictor
-- Model selection complicates inference
+- Rule of thumb: ten observations per **candidate** predictor
+- Model selection complicates statistical inference
 - See E. Vittinghoff et al., _Regression Methods in Biostatistics_ (Chapter 10)
 ]
 
@@ -434,7 +478,8 @@ DT2[, `Sample Size for 80% Power` := n]
 
 ```{r, echo=FALSE, comment=NA}
 DT2[,.(`Standardized Mean Difference`, `Sample Size for 80% Power`)] %>%
-  knitr::kable(format = 'html', align = 'c') 
+  knitr::kable(format = 'html', align = 'c') %>%
+kable_styling(full_width = FALSE, font_size = 20)
 ```
 
 ---
@@ -464,8 +509,8 @@ ggplot(DT2, aes(x = es, y = n)) +
 
 # Some extensions of linear regression
 
+- Robust linear models
 - Generalized linear models
-- Generalized additive models
 - Multilevel or mixed-effects regression
 - Structural equation models
 
