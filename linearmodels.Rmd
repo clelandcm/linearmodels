@@ -62,6 +62,8 @@ library(tidyverse)
 library(ggplot2)
 library(data.table)
 library(magrittr)
+library(knitr)
+library(kableExtra)
 ```
 
 # Variables and Constants
@@ -151,9 +153,16 @@ where
 ```{r, message = FALSE, comment=NA, echo=FALSE}
 DT <- readr::read_csv("ex0222.csv", col_types = c("i","f"))
 
+table1::table1(~ CHOLESTEROL | GROUP, data = DT)
+```
+
+```{r, eval=FALSE, echo=FALSE, results='hide'}
 setDT(DT)
 
-DT[, .(`Mean Cholesterol` = mean(CHOLESTEROL), N = .N), by = .(GROUP)]
+DT[, .(`Mean Cholesterol` = round(mean(CHOLESTEROL),1), SD = round(sd(CHOLESTEROL), 1), N = .N), by = .(GROUP)] %>%
+  .[,.(GROUP, N, `Mean Cholesterol`, SD)] %>%
+kable(format="html") %>%
+kable_styling("striped", full_width = FALSE, font_size = 28)
 ```
 ---
 
@@ -170,10 +179,6 @@ ggplot(DT, aes(x = GROUP, y = CHOLESTEROL)) +
 ---
 
 # t-tests and Analysis of Variance as Linear Models
-
-```{r, message = FALSE, comment=NA}
-
-```
 
 ```{r, message = FALSE, comment=NA}
 t.test(CHOLESTEROL ~ GROUP, data = DT, var.equal = TRUE)
@@ -225,8 +230,9 @@ pois <- read.csv("poison.csv", header = TRUE, colClasses = c("factor","factor","
 
 setDT(pois)
 
-pois[, .(`Mean Survival Time` = mean(SURVTIM), N = .N), by = .(TREATMEN,POISON)] %>%
-  knitr::kable(format = "html")
+pois[, .(N = .N, `Mean Survival Time` = round(mean(SURVTIM),3), SD = round(sd(SURVTIM),3)), by = .(TREATMEN,POISON)] %>%
+  knitr::kable(format = "html") %>%
+kable_styling(full_width = FALSE, font_size = 14)
 ```
 ---
 
@@ -271,7 +277,7 @@ emmeans::contrast(emmeans(fm1, ~ TREATMEN),
 
 # Simulating Data from a Linear Regression Model
 ```{r}
-library(simstudy)
+
 
 ```
 
@@ -312,6 +318,7 @@ class: my-one-page-font
 
 # The Squared Multiple Correlation, $R^2$
 - A number between zero and one summarizing how much of the outcome variable's variance is explained by the model
+- An effect size for a group of explanatory variables or (with increments in $R^2$ ), individual explanatory variables
 
 ---
 

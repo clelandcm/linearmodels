@@ -6,6 +6,9 @@
     <meta name="author" content="Chuck Cleland" />
     <meta name="date" content="2022-02-24" />
     <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/table1/table1_defaults.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -143,22 +146,47 @@ where
 ---
 
 # Cholesterol Data
+<div class="Rtable1"><table class="Rtable1">
+<thead>
+<tr>
+<th class='rowlabel firstrow lastrow'></th>
+<th class='firstrow lastrow'><span class='stratlabel'>RURAL<br><span class='stratn'>(N=49)</span></span></th>
+<th class='firstrow lastrow'><span class='stratlabel'>URBAN<br><span class='stratn'>(N=45)</span></span></th>
+<th class='firstrow lastrow'><span class='stratlabel'>Overall<br><span class='stratn'>(N=94)</span></span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class='rowlabel firstrow'>CHOLESTEROL</td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+<td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Mean (SD)</td>
+<td>157 (31.8)</td>
+<td>217 (39.9)</td>
+<td>186 (46.7)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>Median [Min, Max]</td>
+<td class='lastrow'>152 [95.0, 231]</td>
+<td class='lastrow'>206 [133, 330]</td>
+<td class='lastrow'>183 [95.0, 330]</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-```
-   GROUP Mean Cholesterol  N
-1: URBAN         216.8667 45
-2: RURAL         157.0000 49
-```
+
 ---
 
 class: middle, center
 
-&lt;img src="linearmodels_files/figure-html/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
 ---
 
 # t-tests and Analysis of Variance as Linear Models
-
-
 
 
 ```r
@@ -265,87 +293,100 @@ URBAN        29.93333   3.705451  8.078189 2.475880e-12
 class: middle, center
 
 # Poison Data (n=48)
-&lt;table&gt;
+&lt;table class="table" style="font-size: 14px; width: auto !important; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; TREATMEN &lt;/th&gt;
    &lt;th style="text-align:left;"&gt; POISON &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Mean Survival Time &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; N &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Mean Survival Time &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SD &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; A &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; I &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.4125 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.412 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.069 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; B &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; I &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.8800 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.880 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.161 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; C &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; I &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.5675 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.568 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.157 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; D &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; I &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.6100 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.610 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.113 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; A &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; II &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.3200 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.320 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.075 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; B &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; II &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.8150 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.815 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.336 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; C &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; II &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.3750 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.057 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; D &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; II &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.6675 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.667 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.271 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; A &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; III &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2100 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.210 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.022 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; B &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; III &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.3350 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.335 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.047 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; C &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; III &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2350 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.235 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.013 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; D &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; III &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.3250 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.325 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.026 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -423,9 +464,6 @@ Results are averaged over the levels of: POISON
 
 # Simulating Data from a Linear Regression Model
 
-```r
-library(simstudy)
-```
 
 ---
 
@@ -464,6 +502,7 @@ class: my-one-page-font
 
 # The Squared Multiple Correlation, `\(R^2\)`
 - A number between zero and one summarizing how much of the outcome variable's variance is explained by the model
+- An effect size for a group of explanatory variables or (with increments in `\(R^2\)` ), individual explanatory variables
 
 ---
 
