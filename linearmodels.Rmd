@@ -190,10 +190,17 @@ ggpairs(data = subset(agg, select = c(BPAQ, BIS, age)))
 ---
 
 # Fit and Summarize a Multiple Regression Model
-```{r, message = FALSE, comment=NA,}
+```{r, message = FALSE, comment=NA}
 fm1 <- lm(BPAQ ~ age + BIS, data = agg)
 
 summary(fm1)
+```
+
+---
+
+# ANOVA Table for Multiple Regression
+```{r, message = FALSE, comment=NA}
+anova(fm1)
 ```
 
 ---
@@ -334,7 +341,7 @@ emmeans::contrast(emmeans(fm2, ~ TREATMEN),
 - A standardized coefficient ( $\beta$ ) is interpreted as the increase in the DV, expressed in z scores, expected for a single standard deviation increase in the IV.
 
 .center[
-$\beta = B*sd_x/sd_y$ , $B = \beta*sd_y/sd_x$
+$\beta = B*\frac{sd_x}{sd_y}$ , $B = \beta*\frac{sd_y}{sd_x}$
 ]
 ---
 
@@ -397,9 +404,18 @@ ggplot(agg, aes(x = Predicted_BPAQ, y = BPAQ)) +
 ---
 
 # The Squared Multiple Correlation, $R^2$
+.small[
+.pull-left[
 - A number between zero and one summarizing how much of the outcome variable's variance is explained by the model
-- An effect size for a group of explanatory variables or (with increments in $R^2$ ), individual explanatory variables
-
+- An effect size for a group of explanatory variables or ( with increments in $R^2$ ), individual explanatory variables
+- Can only stay the same or increase as additional variables are added on the right-hand side
+- Adjusted $R^2$ penalizes models for being overly complex
+]
+.pull-right[
+$$R^2=\frac{VAR(Y)-VAR(e)}{VAR(Y)}$$
+$$Adjusted R^2=1-(1-R^2)\frac{N-1}{N-P-1}$$
+]
+]
 ---
 
 # Example Regression Table
@@ -412,11 +428,13 @@ ggplot(agg, aes(x = Predicted_BPAQ, y = BPAQ)) +
 # Assumptions of Linear Model
 - Linearity
 - For standard inference, normally distributed residuals
-- Homoscedasticity (i.e., constant variance of residuals across values of explanatory variables)
+- For standard inference, homoscedasticity (i.e., constant variance of residuals across values of explanatory variables)
 
 ---
 
 # Diagnostics and Workarounds for Linear Model Assumptions
+- Visualize distribution of residuals
+- Plot residuals against explanatory variables to look for differences in residual variance across explanatory variable
 - Transformations of outcome and/or explanatory variables
 - Bootstrapping for inference
 
