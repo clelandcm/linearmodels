@@ -714,6 +714,7 @@ class: my-one-page-font
 - Linearity
 - For standard inference, normally distributed residuals
 - For standard inference, homoscedasticity (i.e., constant variance of residuals across values of explanatory variables)
+- Residuals are independent
 
 ---
 
@@ -752,6 +753,112 @@ class: my-one-page-font
 - **Type III** sum of squares compare the prediction of the full model ( `\(A\)`, `\(B\)`, `\(A*B\)` ) to submodels in which only the effect of interest is eliminated. The difference
 between Type II and Type III is that with Type III, other main effects and the interaction are controlled in assessing a particular main effect while with Type II, higher-order terms are not controlled when assessing lower-order terms.
 ]
+---
+
+# Demonstration of When Order of Entry Matters
+.pull-left[
+
+```r
+fm1a &lt;- lm(BPAQ ~ age + BIS, data = agg)
+fm1b &lt;- lm(BPAQ ~ BIS + age, data = agg)
+anova(fm1a)
+```
+
+```
+Analysis of Variance Table
+
+Response: BPAQ
+           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+age         1  3.230  3.2298  13.420 0.0002991 ***
+BIS         1  6.546  6.5457  27.198 3.641e-07 ***
+Residuals 272 65.461  0.2407                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+]
+
+.pull-right[
+
+```r
+anova(fm1b)
+```
+
+```
+Analysis of Variance Table
+
+Response: BPAQ
+           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+BIS         1  7.737  7.7369 32.1481 3.643e-08 ***
+age         1  2.039  2.0386  8.4706  0.003908 ** 
+Residuals 272 65.461  0.2407                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+]
+
+- In **fm1a**, age gets the first shot at accounting for BPAQ variance, but in **fm1b** age must add to what BIS accounts for already
+
+---
+
+
+```r
+summary(fm1a)$coefficients
+```
+
+```
+               Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept)  1.95439237 0.24492156  7.979666 4.121716e-14
+age         -0.01755627 0.00603219 -2.910430 3.907940e-03
+BIS          0.44360694 0.08506019  5.215213 3.641200e-07
+```
+
+```r
+summary(fm1b)$coefficients
+```
+
+```
+               Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept)  1.95439237 0.24492156  7.979666 4.121716e-14
+BIS          0.44360694 0.08506019  5.215213 3.641200e-07
+age         -0.01755627 0.00603219 -2.910430 3.907940e-03
+```
+- Coefficients in the same model are evaluated adjusting for all other effects (i.e., as if entered last)
+
+---
+
+
+```r
+car::Anova(fm1a, type = "II")
+```
+
+```
+Anova Table (Type II tests)
+
+Response: BPAQ
+          Sum Sq  Df F value    Pr(&gt;F)    
+age        2.039   1  8.4706  0.003908 ** 
+BIS        6.546   1 27.1984 3.641e-07 ***
+Residuals 65.461 272                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+```r
+car::Anova(fm1b, type = "II")
+```
+
+```
+Anova Table (Type II tests)
+
+Response: BPAQ
+          Sum Sq  Df F value    Pr(&gt;F)    
+BIS        6.546   1 27.1984 3.641e-07 ***
+age        2.039   1  8.4706  0.003908 ** 
+Residuals 65.461 272                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
 ---
 
 # Sample size, power, and effect size
@@ -827,7 +934,7 @@ class: middle, center
 
 class: middle, center
 
-&lt;img src="linearmodels_files/figure-html/unnamed-chunk-32-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-36-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 

@@ -429,6 +429,7 @@ $$Adjusted R^2=1-(1-R^2)\frac{N-1}{N-P-1}$$
 - Linearity
 - For standard inference, normally distributed residuals
 - For standard inference, homoscedasticity (i.e., constant variance of residuals across values of explanatory variables)
+- Residuals are independent
 
 ---
 
@@ -467,6 +468,40 @@ $$Adjusted R^2=1-(1-R^2)\frac{N-1}{N-P-1}$$
 - **Type III** sum of squares compare the prediction of the full model ( $A$, $B$, $A*B$ ) to submodels in which only the effect of interest is eliminated. The difference
 between Type II and Type III is that with Type III, other main effects and the interaction are controlled in assessing a particular main effect while with Type II, higher-order terms are not controlled when assessing lower-order terms.
 ]
+---
+
+# Demonstration of When Order of Entry Matters
+.pull-left[
+```{r, echo=TRUE, message = FALSE, comment=NA}
+fm1a <- lm(BPAQ ~ age + BIS, data = agg)
+fm1b <- lm(BPAQ ~ BIS + age, data = agg)
+anova(fm1a)
+```
+]
+
+.pull-right[
+```{r, echo=TRUE, message = FALSE, comment=NA}
+anova(fm1b)
+```
+]
+
+- In **fm1a**, age gets the first shot at accounting for BPAQ variance, but in **fm1b** age must add to what BIS accounts for already
+
+---
+
+```{r, echo=TRUE, message = FALSE, comment=NA}
+summary(fm1a)$coefficients
+summary(fm1b)$coefficients
+```
+- Coefficients in the same model are evaluated adjusting for all other effects (i.e., as if entered last)
+
+---
+
+```{r, echo=TRUE, message = FALSE, comment=NA}
+car::Anova(fm1a, type = "II")
+car::Anova(fm1b, type = "II")
+```
+
 ---
 
 # Sample size, power, and effect size
