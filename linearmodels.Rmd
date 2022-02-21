@@ -441,6 +441,17 @@ $$Adjusted R^2=1-(1-R^2)\frac{N-1}{N-P-1}$$
 
 ---
 
+```{r, echo=FALSE, message=FALSE, fig.width = 7, fig.asp = 0.8, fig.align='center', dev='svg'}
+agg$Residuals <- resid(fm1)
+ggplot(agg, aes(x = BIS, y = Residuals)) +
+  geom_point(size = 2, color = "#673888", alpha = 1/4) +
+  labs(x = "Barratt Impulsiveness Scale", y = "Residuals") +
+  geom_smooth(se=FALSE, color="red") +
+  theme_minimal()
+```
+
+---
+
 # Model building strategies
 
 .pull-left[
@@ -541,8 +552,8 @@ class: middle, center
 
 ```{r, echo=FALSE, fig.height = 5, fig.asp = 0.8, fig.align='center', dev='svg'}
 ggplot(DT2, aes(x = es, y = n)) + 
-  geom_point(size = 3) +
-  geom_path() +
+  geom_point(size = 3, color = "#673888") +
+  geom_path(color = "#673888") +
   labs(x = "Standardized Mean Difference\nDetectable with 80% Power", y = "Total Sample Size") +
   scale_y_continuous(limits=c(0,800), breaks = seq(0,800,100)) +
   scale_x_continuous(limits=c(0.2,0.5), breaks = seq(0.2,0.5,0.05)) +
