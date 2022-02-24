@@ -39,6 +39,12 @@ output:
 .my-one-page-font {
   font-size: 24px;
 }
+
+.Rtable1 {
+    font-family: "Lucida Console", Monaco, monospace;
+    border-collapse: collapse;
+    font-size: 9pt;
+}
 ```
 
 ```{r setup, include=FALSE}
@@ -178,7 +184,7 @@ label(agg$NEOc) <- "NEO Personality Conscientiousness"
 label(agg$NEOo) <- "NEO Personality Openness" 
 label(agg$gender) <- "Gender"
 
-table1(~ ., data = agg[, .(BPAQ, BIS, age, NEOc, NEOo, gender)])
+table1(~ ., data = agg[, .(BPAQ, BIS, age)])
 ```
 
 ---
