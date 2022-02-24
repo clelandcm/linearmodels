@@ -243,7 +243,7 @@ t.test(CHOLESTEROL ~ GROUP, data = DT, var.equal = TRUE)
 ---
 
 # Modified t-tests
-- There is a version of the t-test which does not assume equal variances in the groups compared (Welch-modified)
+- There is a version of the t-test which does not assume equal variances in the groups compared (Welch's t-test)
 - That version is the default in R
 
 ```{r, message = FALSE, comment=NA}
