@@ -234,11 +234,22 @@ ggplot(DT, aes(x = GROUP, y = CHOLESTEROL)) +
 ```
 ---
 
-# t-tests and Analysis of Variance as Linear Models
+# t-tests
 
 ```{r, message = FALSE, comment=NA}
 t.test(CHOLESTEROL ~ GROUP, data = DT, var.equal = TRUE)
 ```
+
+---
+
+# Modified t-tests
+- There is a version of the t-test which does not assume equal variances in the groups compared (Welch-modified)
+- That version is the default in R
+
+```{r, message = FALSE, comment=NA}
+t.test(CHOLESTEROL ~ GROUP, data = DT)
+```
+
 ---
 
 # t-tests are a special case of Analysis of Variance
@@ -248,6 +259,11 @@ summary(aov(CHOLESTEROL ~ GROUP, data = DT))
 
 $$F=t^2$$ 
 when there are only two groups
+
+```{r, message = FALSE, comment=NA}
+sqrt(65.26)
+```
+
 ---
 
 # ANOVA and t-tests are both special cases of linear models 

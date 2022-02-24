@@ -337,7 +337,7 @@ class: middle, center
 &lt;img src="linearmodels_files/figure-html/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
 ---
 
-# t-tests and Analysis of Variance as Linear Models
+# t-tests
 
 
 ```r
@@ -357,6 +357,32 @@ sample estimates:
 mean in group RURAL mean in group URBAN 
            157.0000            216.8667 
 ```
+
+---
+
+# Modified t-tests
+- There is a version of the t-test which does not assume equal variances in the groups compared (Welch-modified)
+- That version is the default in R
+
+
+```r
+t.test(CHOLESTEROL ~ GROUP, data = DT)
+```
+
+```
+
+	Welch Two Sample t-test
+
+data:  CHOLESTEROL by GROUP
+t = -8.0004, df = 83.997, p-value = 6.056e-12
+alternative hypothesis: true difference in means between group RURAL and group URBAN is not equal to 0
+95 percent confidence interval:
+ -74.74734 -44.98599
+sample estimates:
+mean in group RURAL mean in group URBAN 
+           157.0000            216.8667 
+```
+
 ---
 
 # t-tests are a special case of Analysis of Variance
@@ -375,6 +401,16 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 `$$F=t^2$$` 
 when there are only two groups
+
+
+```r
+sqrt(65.26)
+```
+
+```
+[1] 8.078366
+```
+
 ---
 
 # ANOVA and t-tests are both special cases of linear models 
@@ -545,7 +581,7 @@ class: middle, center
 
 class: middle, center
 
-&lt;img src="linearmodels_files/figure-html/unnamed-chunk-20-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
 ---
 
 # Interaction Effects 
@@ -667,7 +703,7 @@ predict(fm1, newdata = expand.grid(age = c(17,18), BIS = c(3,4)))
 ---
 
 # Linear model residuals
-&lt;img src="linearmodels_files/figure-html/unnamed-chunk-27-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-29-1.svg" style="display: block; margin: auto;" /&gt;
 
 - Typically off by a small amount, but sometimes a large over- or under-estimate of BPAQ
 
@@ -683,7 +719,7 @@ class: my-one-page-font
 ]
 
 .pull-right[
-&lt;img src="linearmodels_files/figure-html/unnamed-chunk-28-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-30-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -726,7 +762,7 @@ class: my-one-page-font
 
 ---
 
-&lt;img src="linearmodels_files/figure-html/unnamed-chunk-29-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-31-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -938,7 +974,7 @@ class: middle, center
 
 class: middle, center
 
-&lt;img src="linearmodels_files/figure-html/unnamed-chunk-37-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="linearmodels_files/figure-html/unnamed-chunk-39-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
