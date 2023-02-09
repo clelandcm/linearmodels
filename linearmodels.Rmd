@@ -2,7 +2,7 @@
 title: "Linear Regression Models"
 author: "Chuck Cleland"
 institute: "NYU Grossman School of Medicine, Department of Population Health"
-date: "February 24, 2022"
+date: "February 9, 2023"
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
