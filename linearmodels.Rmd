@@ -78,7 +78,7 @@ library(GGally)
 
 .large[
 - Any characteristic that varies from one individual to another can be called a *variable*.
-- Social and health research is concerned with relations among variables.
+- Social and health research is concerned with *relations* among variables.
 - An example of a variable is sleep latency -- the time it takes an individual to fall asleep.
 - If sleep latency were exactly the same for all people, it would be a *constant*.
 ]
